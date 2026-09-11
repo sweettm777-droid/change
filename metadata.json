@@ -1,0 +1,6 @@
+{
+  "name": "학급 자리바꾸기 & 청소구역 배치기",
+  "description": "긴장감 넘치는 공개 연출, 교사 전용 특별 조건(지정석/분리), 다양한 배치 형태(분단/시험대형/하이브리드), 청소구역 배정 및 인쇄·JPG 저장을 지원하는 학급 경영 도구",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
