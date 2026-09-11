@@ -23,14 +23,33 @@ interface CleaningTabProps {
 }
 
 export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
-  const [classNameTitle, setClassNameTitle] = useState<string>('9반');
+  const [classNameTitle, setClassNameTitle] = useState<string>(() => {
+    const saved = localStorage.getItem('app_class_title');
+    return saved !== null ? saved : '';
+  });
 
-  // Areas state
+  // Areas state (v2 resets legacy fixed students so everything is randomly assigned by default)
   const [areas, setAreas] = useState<CleaningArea[]>(() => {
-    const saved = localStorage.getItem('app_cleaning_areas');
+    const saved = localStorage.getItem('app_cleaning_areas_v2');
     if (saved) {
       try {
         return JSON.parse(saved);
+      } catch {
+        // fallback
+      }
+    }
+    // If older storage exists, strip legacy fixed students
+    const oldSaved = localStorage.getItem('app_cleaning_areas');
+    if (oldSaved) {
+      try {
+        const parsed: CleaningArea[] = JSON.parse(oldSaved);
+        const legacyNames = ['준나', '배민서', '시연'];
+        parsed.forEach((a) => {
+          a.subItems.forEach((s) => {
+            s.fixedStudents = s.fixedStudents.filter((n) => !legacyNames.includes(n));
+          });
+        });
+        return parsed;
       } catch {
         // fallback
       }
@@ -58,7 +77,11 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
 
   // Save to localStorage
   useEffect(() => {
-    localStorage.setItem('app_cleaning_areas', JSON.stringify(areas));
+    localStorage.setItem('app_class_title', classNameTitle);
+  }, [classNameTitle]);
+
+  useEffect(() => {
+    localStorage.setItem('app_cleaning_areas_v2', JSON.stringify(areas));
   }, [areas]);
 
   useEffect(() => {
@@ -103,9 +126,10 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
     if (!printAreaRef.current) return;
     setIsExporting(true);
     try {
+      const filePrefix = classNameTitle ? `${classNameTitle}_` : '';
       await exportAsJpg(
         printAreaRef.current,
-        `${classNameTitle}_청소구역표_${new Date().toISOString().slice(0, 10)}.jpg`
+        `${filePrefix}청소구역표_${new Date().toISOString().slice(0, 10)}.jpg`
       );
     } catch (err) {
       alert('이미지 저장 중 오류가 발생했습니다.');
@@ -147,8 +171,8 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
                 type="text"
                 value={classNameTitle}
                 onChange={(e) => setClassNameTitle(e.target.value)}
-                placeholder="예: 9반, 3학년 2반"
-                className="text-xs font-bold border border-slate-300 rounded-lg px-2.5 py-1.5 w-28 text-center bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500"
+                placeholder="예: 1반, 3학년 2반"
+                className="text-xs font-bold border border-slate-300 rounded-lg px-2.5 py-1.5 w-32 text-center bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500"
               />
             </div>
 
@@ -170,7 +194,7 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
               id="btn-cleaning-settings"
               onClick={() => setIsSettingsOpen(true)}
               className="flex items-center space-x-1.5 px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-emerald-300 rounded-xl text-xs font-bold border border-slate-700 shadow-xs transition-colors"
-              title="청소구역 추가/삭제, 인원수 조정, 음영 고정(준나, 배민서, 시연 등) 관리"
+              title="청소구역 추가/삭제, 인원수 조정, 고정 담당자 설정, 청소 제외 학생 관리"
             >
               <Sliders className="w-3.5 h-3.5 text-emerald-400" />
               <span>청소구역 특별 설정</span>

@@ -14,15 +14,15 @@ export const CleaningDutyTable: React.FC<CleaningDutyTableProps> = ({
 }) => {
   return (
     <div className="w-full max-w-4xl mx-auto bg-white p-6 sm:p-10 border border-slate-300 shadow-sm rounded-xl printable-area">
-      {/* Title matching PDF */}
+      {/* Title */}
       <div className="text-center mb-8">
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-wider">
-          {classNameTitle} 청소 구역표
+          {classNameTitle ? `${classNameTitle} 청소 구역표` : '학급 청소 구역표'}
         </h1>
         <div className="w-48 h-0.5 bg-slate-900 mx-auto mt-2"></div>
       </div>
 
-      {/* Main Table replicating PDF 9반 청소 구역표 */}
+      {/* Main Table */}
       <div className="overflow-x-auto border-2 border-slate-900">
         <table className="w-full border-collapse text-center text-sm sm:text-base">
           <thead>
@@ -100,9 +100,9 @@ export const CleaningDutyTable: React.FC<CleaningDutyTableProps> = ({
         </table>
       </div>
 
-      {/* Footer Notes for PDF print */}
+      {/* Footer Notes */}
       <div className="mt-4 flex items-center justify-between text-xs text-slate-500">
-        <span>※ 음영 처리된 칸은 고정 역할자이며, 그 외 구역은 무작위 자동 추첨으로 배정되었습니다.</span>
+        <span>※ 무작위 자동 추첨으로 배정되었으며, 음영 처리된 칸은 고정 담당자입니다.</span>
         <span className="print-only font-mono">인쇄일자: {new Date().toLocaleDateString('ko-KR')}</span>
       </div>
     </div>

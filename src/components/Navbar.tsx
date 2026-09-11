@@ -69,7 +69,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <Sparkles className="w-4 h-4" />
               <span>청소구역 배정</span>
               <span className="text-[11px] bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded font-bold">
-                9반표 탑재
+                자동 추첨
               </span>
             </button>
           </div>

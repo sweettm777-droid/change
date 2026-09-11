@@ -162,7 +162,7 @@ export const CleaningSettingsModal: React.FC<CleaningSettingsModalProps> = ({
   };
 
   const handleReset = () => {
-    if (window.confirm('첨부파일의 기본 9반 청소구역표 데이터로 되돌리시겠습니까?')) {
+    if (window.confirm('기본 청소구역표 데이터로 초기화하시겠습니까? (고정 없이 전체 랜덤 배정)')) {
       setLocalAreas(JSON.parse(JSON.stringify(INITIAL_CLEANING_AREAS)));
       setLocalExcluded([]);
       onResetDefault();
@@ -181,7 +181,7 @@ export const CleaningSettingsModal: React.FC<CleaningSettingsModalProps> = ({
             <div>
               <h3 className="font-bold text-base tracking-tight">청소구역 특별 주문 및 구역 설정</h3>
               <p className="text-xs text-slate-400">
-                첨부파일의 음영 고정 인원(준나, 배민서, 시연 등)을 관리하고 구역 및 인원수를 추가·수정합니다.
+                원하는 구역에 특정 학생을 음영 고정하거나 구역 및 인원수를 추가·수정할 수 있습니다.
               </p>
             </div>
           </div>
@@ -396,7 +396,7 @@ export const CleaningSettingsModal: React.FC<CleaningSettingsModalProps> = ({
             className="flex items-center space-x-1 text-xs text-slate-600 hover:text-slate-900 px-2.5 py-1.5 rounded-lg hover:bg-slate-200/60"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            <span>첨부파일 9반 기본표로 초기화</span>
+            <span>기본 청소구역표로 초기화</span>
           </button>
 
           <div className="flex space-x-2">

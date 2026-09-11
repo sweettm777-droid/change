@@ -41,7 +41,7 @@ export const StudentManagerModal: React.FC<StudentManagerModalProps> = ({
   };
 
   const handleResetToDefault = () => {
-    if (window.confirm('기본 학생 명단(9반 청소구역표 포함 24명)으로 초기화하시겠습니까?')) {
+    if (window.confirm('기본 학생 명단(24명)으로 초기화하시겠습니까?')) {
       onSaveStudents(INITIAL_STUDENTS);
       setInputText(INITIAL_STUDENTS.map((s) => s.name).join('\n'));
     }

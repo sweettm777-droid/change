@@ -71,17 +71,14 @@ export const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose }) => {
           <div className="space-y-1.5">
             <h4 className="font-bold text-slate-900 flex items-center space-x-1.5 text-sm">
               <Sparkles className="w-4 h-4 text-emerald-600" />
-              <span>3. 9반 청소구역표 탑재 & 랜덤 배정</span>
+              <span>3. 청소구역표 탑재 & 전 구역 랜덤 배정</span>
             </h4>
             <ul className="list-disc list-inside space-y-1 pl-1 text-slate-600">
               <li>
-                첨부해주신 <b>9반 청소 구역표</b>의 세부 항목과 고정 인원(준나, 배민서, 시연 등) 음영 처리를 완벽하게 탑재했습니다.
+                교실 쓸기/닦기, 칠판 정리, 손걸레, 복도, 분리수거, 특별구역 등 실무 청소 항목이 기본 탑재되어 있으며 모든 구역이 무작위로 공정하게 자동 추첨됩니다.
               </li>
               <li>
-                음영 처리된 칸은 해당 학생으로 고정되고, 빈칸은 지정된 인원수대로 나머지 학생 중에서 공정하게 무작위 추첨됩니다.
-              </li>
-              <li>
-                [청소구역 특별 설정]에서 구역을 추가/삭제하거나 인원수 수정, 음영 고정자 변경, 청소 제외 학생을 지정할 수 있습니다.
+                <b>특별 설정 지원</b>: 필요시 [청소구역 특별 설정]에서 원하는 학생을 특정 구역에 음영 고정하거나, 구역 추가/삭제, 인원수 조절, 청소 제외 학생(임원 등)을 지정할 수 있습니다.
               </li>
             </ul>
           </div>

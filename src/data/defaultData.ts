@@ -1,9 +1,9 @@
 import { CleaningArea, Student } from '../types';
 
 export const INITIAL_STUDENTS: Student[] = [
-  { id: 's1', name: '준나', number: 1, gender: 'female' },
-  { id: 's2', name: '배민서', number: 2, gender: 'female' },
-  { id: 's3', name: '시연', number: 3, gender: 'female' },
+  { id: 's1', name: '강민수', number: 1, gender: 'male' },
+  { id: 's2', name: '고은별', number: 2, gender: 'female' },
+  { id: 's3', name: '권서준', number: 3, gender: 'male' },
   { id: 's4', name: '강도윤', number: 4, gender: 'male' },
   { id: 's5', name: '김민준', number: 5, gender: 'male' },
   { id: 's6', name: '김서준', number: 6, gender: 'male' },
@@ -82,8 +82,8 @@ export const INITIAL_CLEANING_AREAS: CleaningArea[] = [
       {
         id: 'board-clean',
         title: '칠판 닦고, 걸레 빨기',
-        count: 2, // 준나 (음영 고정) + 1명
-        fixedStudents: ['준나'],
+        count: 2,
+        fixedStudents: [],
         assignedStudents: [],
       },
     ],
@@ -96,7 +96,7 @@ export const INITIAL_CLEANING_AREAS: CleaningArea[] = [
         id: 'cloth-clean',
         title: '사물함, 난방기, 창틀, 복도 창틀 위\n손걸레로 깨끗이 닦고, 걸레 빨기',
         count: 2,
-        fixedStudents: ['배민서', '시연'],
+        fixedStudents: [],
         assignedStudents: [],
       },
     ],
@@ -155,7 +155,7 @@ export const INITIAL_CLEANING_AREAS: CleaningArea[] = [
         id: 'special-recycle-station',
         title: '분리수거장',
         count: 2,
-        fixedStudents: ['배민서', '시연'],
+        fixedStudents: [],
         assignedStudents: [],
       },
     ],
