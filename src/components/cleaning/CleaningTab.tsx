@@ -12,6 +12,8 @@ import {
   Check,
   Copy,
   RotateCcw,
+  CheckCircle2,
+  AlertTriangle,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { solveCleaningDuty } from '../../utils/cleaningAlgorithm';
@@ -28,7 +30,7 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
     return saved !== null ? saved : '';
   });
 
-  // Areas state (v2 resets legacy fixed students so everything is randomly assigned by default)
+  // Areas state
   const [areas, setAreas] = useState<CleaningArea[]>(() => {
     const saved = localStorage.getItem('app_cleaning_areas_v2');
     if (saved) {
@@ -38,7 +40,6 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
         // fallback
       }
     }
-    // If older storage exists, strip legacy fixed students
     const oldSaved = localStorage.getItem('app_cleaning_areas');
     if (oldSaved) {
       try {
@@ -72,6 +73,7 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [isExporting, setIsExporting] = useState<boolean>(false);
   const [copyFeedback, setCopyFeedback] = useState<boolean>(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const printAreaRef = useRef<HTMLDivElement>(null);
 
@@ -88,26 +90,31 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
     localStorage.setItem('app_cleaning_excluded', JSON.stringify(excludedStudents));
   }, [excludedStudents]);
 
+  // Show temporary toast
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage((cur) => (cur === msg ? null : cur));
+    }, 4000);
+  };
+
   // Start Random Assignment with Dramatic Roulette Rolling Effect
   const handleStartRandomAssignment = () => {
     setIsRolling(true);
     soundEffects.playHeartbeat();
 
-    // Rapid drum ticks during rolling
     let tickCount = 0;
     const interval = window.setInterval(() => {
       soundEffects.playDrumRollTick(1.0 + tickCount * 0.05);
       tickCount++;
       if (tickCount >= 10) {
         clearInterval(interval);
-        // Solve final assignment
         const solved = solveCleaningDuty(areas, students, excludedStudents);
         setAreas(solved);
         setIsRevealed(true);
         setIsRolling(false);
         soundEffects.playFanfare();
 
-        // Confetti
         try {
           confetti({
             particleCount: 100,
@@ -119,6 +126,23 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
         }
       }
     }, 120);
+  };
+
+  // Reset assignment only (keep areas configuration)
+  const handleResetAssignment = () => {
+    if (window.confirm('현재 청소구역 배정 결과를 초기화하시겠습니까?\n(설정해두신 청소구역 항목과 인원수는 그대로 유지됩니다)')) {
+      setAreas((prev) =>
+        prev.map((area) => ({
+          ...area,
+          subItems: area.subItems.map((sub) => ({
+            ...sub,
+            assignedStudents: [],
+          })),
+        }))
+      );
+      setIsRevealed(false);
+      showToast('배정 결과가 초기화되었습니다. 다시 랜덤 배정하실 수 있습니다.');
+    }
   };
 
   // Export as JPG
@@ -158,6 +182,8 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
     });
   });
 
+  const availableStudentsCount = Math.max(0, students.length - excludedStudents.length);
+
   return (
     <div className="space-y-6">
       {/* Action Toolbar */}
@@ -177,11 +203,17 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
             </div>
 
             <div className="flex items-center space-x-3 text-xs text-slate-500 pl-2 border-l border-slate-200">
-              <span>총 대상 학생: <b className="text-slate-800">{students.length}명</b></span>
-              <span>필요 청소 인원: <b className="text-emerald-700">{totalSlots}명</b></span>
+              <span>총 학생: <b className="text-slate-800">{students.length}명</b></span>
+              <span>필요 인원: <b className="text-emerald-700">{totalSlots}명</b></span>
               {excludedStudents.length > 0 && (
                 <span className="bg-rose-50 text-rose-700 px-2 py-0.5 rounded font-medium border border-rose-200">
                   {excludedStudents.length}명 제외됨
+                </span>
+              )}
+              {totalSlots > availableStudentsCount && (
+                <span className="text-[11px] bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded font-medium flex items-center space-x-1">
+                  <AlertTriangle className="w-3 h-3 text-amber-600" />
+                  <span>학생 {totalSlots - availableStudentsCount}명 부족</span>
                 </span>
               )}
             </div>
@@ -189,27 +221,39 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
 
           {/* Right: Actions */}
           <div className="flex flex-wrap items-center gap-2">
-            {/* Special Settings Modal Trigger */}
+            {/* Free Configuration & Settings Modal Trigger */}
             <button
               id="btn-cleaning-settings"
               onClick={() => setIsSettingsOpen(true)}
               className="flex items-center space-x-1.5 px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-emerald-300 rounded-xl text-xs font-bold border border-slate-700 shadow-xs transition-colors"
-              title="청소구역 추가/삭제, 인원수 조정, 고정 담당자 설정, 청소 제외 학생 관리"
+              title="청소구역 항목 및 인원수를 자유롭게 입력하고 편집합니다"
             >
               <Sliders className="w-3.5 h-3.5 text-emerald-400" />
-              <span>청소구역 특별 설정</span>
+              <span>청소구역 자유 설정 및 편집</span>
             </button>
 
             {/* Random Assignment Trigger */}
             <button
               id="btn-start-cleaning-random"
               onClick={handleStartRandomAssignment}
-              disabled={isRolling}
+              disabled={isRolling || areas.length === 0}
               className="flex items-center space-x-1.5 px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs font-extrabold shadow-sm hover:shadow-md transition-all active:scale-95 disabled:opacity-50"
             >
               <Shuffle className="w-4 h-4" />
               <span>{isRolling ? '추첨 롤링 중...' : '청소구역 랜덤 배정하기!'}</span>
             </button>
+
+            {/* Reset assignment if revealed */}
+            {isRevealed && (
+              <button
+                onClick={handleResetAssignment}
+                className="flex items-center space-x-1 px-2.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 hover:text-slate-900 rounded-xl text-xs font-semibold shadow-2xs transition-colors"
+                title="배정 결과를 초기화하고 미배정 상태로 되돌립니다"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>배정 초기화</span>
+              </button>
+            )}
 
             {/* Print Button */}
             <button
@@ -229,7 +273,7 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
               title="JPG 고화질 이미지 저장"
             >
               <Download className="w-3.5 h-3.5 text-emerald-600" />
-              <span>{isExporting ? '저장 중...' : 'JPG 다운로드'}</span>
+              <span>{isExporting ? '저장 중...' : 'JPG'}</span>
             </button>
 
             {/* Copy Clipboard */}
@@ -241,7 +285,7 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
               {copyFeedback ? (
                 <>
                   <Check className="w-3.5 h-3.5 text-emerald-600" />
-                  <span className="text-emerald-600">복사됨!</span>
+                  <span className="text-emerald-600 font-bold">복사됨!</span>
                 </>
               ) : (
                 <>
@@ -252,6 +296,22 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
             </button>
           </div>
         </div>
+
+        {/* Toast Notification */}
+        {toastMessage && (
+          <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl p-3 text-xs font-semibold flex items-center justify-between animate-in fade-in">
+            <div className="flex items-center space-x-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>{toastMessage}</span>
+            </div>
+            <button
+              onClick={() => setToastMessage(null)}
+              className="text-emerald-700 hover:text-emerald-950 font-bold"
+            >
+              ×
+            </button>
+          </div>
+        )}
 
         {/* Rolling alert banner */}
         {isRolling && (
@@ -268,6 +328,7 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
           classNameTitle={classNameTitle}
           areas={areas}
           isRevealed={isRevealed}
+          onOpenSettings={() => setIsSettingsOpen(true)}
         />
       </div>
 
@@ -279,13 +340,24 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
         students={students}
         excludedStudents={excludedStudents}
         onSave={(updatedAreas, newExcluded) => {
-          setAreas(updatedAreas);
+          // Reset assigned students in updated areas so next click shuffles cleanly into new slots
+          const cleanAreas = updatedAreas.map((area) => ({
+            ...area,
+            subItems: area.subItems.map((sub) => ({
+              ...sub,
+              assignedStudents: [],
+            })),
+          }));
+          setAreas(cleanAreas);
           setExcludedStudents(newExcluded);
-          alert('청소구역 설정이 저장되었습니다. 랜덤 배정을 누르면 반영됩니다.');
+          setIsRevealed(false);
+          showToast('청소구역 설정이 저장되었습니다. [청소구역 랜덤 배정하기!]를 누르면 새 구역으로 배정됩니다.');
         }}
         onResetDefault={() => {
           setAreas(INITIAL_CLEANING_AREAS);
           setExcludedStudents([]);
+          setIsRevealed(false);
+          showToast('기본 청소구역표 데이터로 초기화되었습니다.');
         }}
       />
     </div>
