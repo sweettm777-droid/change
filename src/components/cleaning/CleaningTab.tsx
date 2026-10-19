@@ -187,60 +187,61 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
   return (
     <div className="space-y-6">
       {/* Action Toolbar */}
-      <div className="no-print bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-xs space-y-4">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div className="no-print bg-white rounded-2xl p-3 sm:p-5 border border-slate-200 shadow-xs space-y-3 sm:space-y-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4">
           {/* Left: Class Name & Quick Stats */}
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center space-x-2">
-              <span className="text-xs font-bold text-slate-600">학급 명칭:</span>
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <div className="flex items-center space-x-1.5 sm:space-x-2">
+              <span className="text-xs font-bold text-slate-600">학급:</span>
               <input
                 type="text"
                 value={classNameTitle}
                 onChange={(e) => setClassNameTitle(e.target.value)}
-                placeholder="예: 1반, 3학년 2반"
-                className="text-xs font-bold border border-slate-300 rounded-lg px-2.5 py-1.5 w-32 text-center bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500"
+                placeholder="예: 3학년 2반"
+                className="text-xs font-bold border border-slate-300 rounded-lg px-2.5 py-1.5 w-28 sm:w-32 text-center bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500"
               />
             </div>
 
-            <div className="flex items-center space-x-3 text-xs text-slate-500 pl-2 border-l border-slate-200">
-              <span>총 학생: <b className="text-slate-800">{students.length}명</b></span>
-              <span>필요 인원: <b className="text-emerald-700">{totalSlots}명</b></span>
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 pl-2 border-l border-slate-200">
+              <span>총원: <b className="text-slate-800">{students.length}명</b></span>
+              <span>필요: <b className="text-emerald-700">{totalSlots}명</b></span>
               {excludedStudents.length > 0 && (
-                <span className="bg-rose-50 text-rose-700 px-2 py-0.5 rounded font-medium border border-rose-200">
-                  {excludedStudents.length}명 제외됨
+                <span className="bg-rose-50 text-rose-700 px-1.5 py-0.5 rounded font-medium border border-rose-200 text-[11px]">
+                  {excludedStudents.length}명 제외
                 </span>
               )}
               {totalSlots > availableStudentsCount && (
                 <span className="text-[11px] bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded font-medium flex items-center space-x-1">
                   <AlertTriangle className="w-3 h-3 text-amber-600" />
-                  <span>학생 {totalSlots - availableStudentsCount}명 부족</span>
+                  <span>{totalSlots - availableStudentsCount}명 부족</span>
                 </span>
               )}
             </div>
           </div>
 
           {/* Right: Actions */}
-          <div className="flex flex-wrap items-center gap-2">
-            {/* Free Configuration & Settings Modal Trigger */}
-            <button
-              id="btn-cleaning-settings"
-              onClick={() => setIsSettingsOpen(true)}
-              className="flex items-center space-x-1.5 px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-emerald-300 rounded-xl text-xs font-bold border border-slate-700 shadow-xs transition-colors"
-              title="청소구역 항목 및 인원수를 자유롭게 입력하고 편집합니다"
-            >
-              <Sliders className="w-3.5 h-3.5 text-emerald-400" />
-              <span>청소구역 자유 설정 및 편집</span>
-            </button>
-
-            {/* Random Assignment Trigger */}
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            {/* Random Assignment Trigger (Prominent CTA) */}
             <button
               id="btn-start-cleaning-random"
               onClick={handleStartRandomAssignment}
               disabled={isRolling || areas.length === 0}
-              className="flex items-center space-x-1.5 px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs font-extrabold shadow-sm hover:shadow-md transition-all active:scale-95 disabled:opacity-50"
+              className="w-full sm:w-auto flex items-center justify-center space-x-1.5 px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs sm:text-sm font-extrabold shadow-sm hover:shadow-md transition-all active:scale-95 disabled:opacity-50 order-first sm:order-none"
             >
               <Shuffle className="w-4 h-4" />
               <span>{isRolling ? '추첨 롤링 중...' : '청소구역 랜덤 배정하기!'}</span>
+            </button>
+
+            {/* Free Configuration & Settings Modal Trigger */}
+            <button
+              id="btn-cleaning-settings"
+              onClick={() => setIsSettingsOpen(true)}
+              className="flex items-center space-x-1 sm:space-x-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-900 text-emerald-300 rounded-xl text-xs font-bold border border-slate-700 shadow-xs transition-colors"
+              title="청소구역 항목 및 인원수를 자유롭게 입력하고 편집합니다"
+            >
+              <Sliders className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="hidden sm:inline">청소구역 자유 설정 및 편집</span>
+              <span className="sm:hidden">구역 편집</span>
             </button>
 
             {/* Reset assignment if revealed */}
@@ -251,14 +252,14 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
                 title="배정 결과를 초기화하고 미배정 상태로 되돌립니다"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
-                <span>배정 초기화</span>
+                <span>초기화</span>
               </button>
             )}
 
             {/* Print Button */}
             <button
               onClick={triggerPrint}
-              className="flex items-center space-x-1 px-3 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold shadow-2xs transition-colors"
+              className="flex items-center space-x-1 px-2.5 sm:px-3 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold shadow-2xs transition-colors"
               title="A4 용지 인쇄"
             >
               <Printer className="w-3.5 h-3.5 text-slate-600" />
@@ -269,17 +270,17 @@ export const CleaningTab: React.FC<CleaningTabProps> = ({ students }) => {
             <button
               onClick={handleExportJpg}
               disabled={isExporting}
-              className="flex items-center space-x-1 px-3 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold shadow-2xs transition-colors disabled:opacity-50"
+              className="flex items-center space-x-1 px-2.5 sm:px-3 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold shadow-2xs transition-colors disabled:opacity-50"
               title="JPG 고화질 이미지 저장"
             >
               <Download className="w-3.5 h-3.5 text-emerald-600" />
-              <span>{isExporting ? '저장 중...' : 'JPG'}</span>
+              <span>{isExporting ? '저장중' : 'JPG'}</span>
             </button>
 
             {/* Copy Clipboard */}
             <button
               onClick={handleCopyClipboard}
-              className="flex items-center space-x-1 px-2.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold shadow-2xs transition-colors"
+              className="flex items-center space-x-1 px-2 sm:px-2.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold shadow-2xs transition-colors"
               title="클립보드에 이미지 복사"
             >
               {copyFeedback ? (

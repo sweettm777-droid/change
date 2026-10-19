@@ -10,12 +10,12 @@ export const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden border border-slate-200 animate-in fade-in duration-150">
-        <div className="px-6 py-4 bg-indigo-900 text-white flex items-center justify-between">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-3 sm:p-4 overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden border border-slate-200 flex flex-col max-h-[92dvh] animate-in fade-in duration-150">
+        <div className="px-4 sm:px-6 py-3.5 sm:py-4 bg-indigo-900 text-white flex items-center justify-between shrink-0">
           <div className="flex items-center space-x-2.5">
             <HelpCircle className="w-5 h-5 text-indigo-300" />
-            <h3 className="font-bold text-base">학급 스마트 메이커 사용 가이드</h3>
+            <h3 className="font-bold text-sm sm:text-base">학급 스마트 메이커 사용 가이드</h3>
           </div>
           <button
             onClick={onClose}
@@ -25,7 +25,7 @@ export const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        <div className="p-6 space-y-4 text-xs sm:text-sm text-slate-700 leading-relaxed max-h-[70vh] overflow-y-auto">
+        <div className="p-4 sm:p-6 space-y-4 text-xs sm:text-sm text-slate-700 leading-relaxed overflow-y-auto flex-1">
           {/* Section 1 */}
           <div className="space-y-1.5">
             <h4 className="font-bold text-slate-900 flex items-center space-x-1.5 text-sm">

@@ -349,8 +349,8 @@ export const CleaningSettingsModal: React.FC<CleaningSettingsModalProps> = ({
         </div>
 
         {/* Tab Navigation */}
-        <div className="px-5 sm:px-6 pt-3 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 shrink-0">
-          <div className="flex space-x-2">
+        <div className="px-3 sm:px-6 pt-2.5 sm:pt-3 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 shrink-0">
+          <div className="flex space-x-1 sm:space-x-2">
             <button
               onClick={() => {
                 if (activeTab === 'visual') {
@@ -358,14 +358,15 @@ export const CleaningSettingsModal: React.FC<CleaningSettingsModalProps> = ({
                 }
                 setActiveTab('bulk');
               }}
-              className={`flex items-center space-x-1.5 px-3.5 py-2 text-xs font-bold border-b-2 transition-all ${
+              className={`flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3.5 py-2 text-xs font-bold border-b-2 transition-all ${
                 activeTab === 'bulk'
                   ? 'border-emerald-600 text-emerald-700 bg-white rounded-t-lg shadow-2xs'
                   : 'border-transparent text-slate-600 hover:text-slate-900'
               }`}
             >
               <FileText className="w-3.5 h-3.5" />
-              <span>한 번에 자유 입력 (텍스트 / 줄바꿈)</span>
+              <span className="hidden sm:inline">한 번에 자유 입력 (텍스트 / 줄바꿈)</span>
+              <span className="sm:hidden">한 번에 입력</span>
             </button>
 
             <button
@@ -376,42 +377,44 @@ export const CleaningSettingsModal: React.FC<CleaningSettingsModalProps> = ({
                 }
                 setActiveTab('visual');
               }}
-              className={`flex items-center space-x-1.5 px-3.5 py-2 text-xs font-bold border-b-2 transition-all ${
+              className={`flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3.5 py-2 text-xs font-bold border-b-2 transition-all ${
                 activeTab === 'visual'
                   ? 'border-emerald-600 text-emerald-700 bg-white rounded-t-lg shadow-2xs'
                   : 'border-transparent text-slate-600 hover:text-slate-900'
               }`}
             >
               <List className="w-3.5 h-3.5" />
-              <span>개별 직접 편집 (표 형태)</span>
+              <span className="hidden sm:inline">개별 직접 편집 (표 형태)</span>
+              <span className="sm:hidden">직접 편집</span>
             </button>
 
             <button
               onClick={() => setActiveTab('exclude')}
-              className={`flex items-center space-x-1.5 px-3.5 py-2 text-xs font-bold border-b-2 transition-all ${
+              className={`flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3.5 py-2 text-xs font-bold border-b-2 transition-all ${
                 activeTab === 'exclude'
                   ? 'border-emerald-600 text-emerald-700 bg-white rounded-t-lg shadow-2xs'
                   : 'border-transparent text-slate-600 hover:text-slate-900'
               }`}
             >
               <UserX className="w-3.5 h-3.5 text-rose-500" />
-              <span>배정 제외 학생 ({localExcluded.length})</span>
+              <span className="hidden sm:inline">배정 제외 학생 ({localExcluded.length})</span>
+              <span className="sm:hidden">제외 ({localExcluded.length})</span>
             </button>
           </div>
 
           {/* Quick status bar */}
-          <div className="flex items-center space-x-2 text-xs py-1">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs py-1">
             <span className="text-slate-500">
-              필요 청소 인원: <b className="text-emerald-700 font-bold">{currentSlots}명</b>
+              필요: <b className="text-emerald-700 font-bold">{currentSlots}명</b>
             </span>
             <span className="text-slate-300">|</span>
             <span className="text-slate-500">
-              배정 가능 학생: <b className="text-slate-800 font-bold">{availableStudentsCount}명</b>
+              가능: <b className="text-slate-800 font-bold">{availableStudentsCount}명</b>
             </span>
             {currentSlots > availableStudentsCount && (
-              <span className="text-[11px] bg-amber-50 text-amber-700 border border-amber-200 px-1.5 py-0.5 rounded font-medium flex items-center space-x-1">
+              <span className="text-[10px] sm:text-[11px] bg-amber-50 text-amber-700 border border-amber-200 px-1.5 py-0.5 rounded font-medium flex items-center space-x-1">
                 <AlertCircle className="w-3 h-3 text-amber-600" />
-                <span>학생 부족 ({currentSlots - availableStudentsCount}명)</span>
+                <span>부족 ({currentSlots - availableStudentsCount}명)</span>
               </span>
             )}
           </div>

@@ -231,49 +231,54 @@ export const SeatingTab: React.FC<SeatingTabProps> = ({ students }) => {
   return (
     <div className="space-y-6">
       {/* Control Action Toolbar */}
-      <div className="no-print bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-xs space-y-4">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div className="no-print bg-white rounded-2xl p-3 sm:p-5 border border-slate-200 shadow-xs space-y-3 sm:space-y-4">
+        {/* Row 1: Layout Modes & Actions */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4">
           {/* Left: Layout Modes */}
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             <span className="text-xs font-bold text-slate-500 mr-1 flex items-center">
               <Grid className="w-3.5 h-3.5 mr-1 text-slate-400" />
-              배치 형태:
+              <span className="hidden sm:inline">배치 형태:</span>
+              <span className="sm:hidden">형태:</span>
             </span>
 
             {/* Mode: Pair */}
             <button
               onClick={() => handleModeChange('pair')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 config.mode === 'pair'
                   ? 'bg-indigo-600 text-white shadow-xs'
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
-              <span>짝꿍 분단형 (2인 1조)</span>
+              <span className="hidden sm:inline">짝꿍 분단형 (2인 1조)</span>
+              <span className="sm:hidden">짝꿍(2인)</span>
             </button>
 
             {/* Mode: Exam */}
             <button
               onClick={() => handleModeChange('exam')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 config.mode === 'exam'
                   ? 'bg-indigo-600 text-white shadow-xs'
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
-              <span>시험 대형 (1인 1석)</span>
+              <span className="hidden sm:inline">시험 대형 (1인 1석)</span>
+              <span className="sm:hidden">시험(1인)</span>
             </button>
 
             {/* Mode: Hybrid */}
             <button
               onClick={() => handleModeChange('hybrid')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 config.mode === 'hybrid'
                   ? 'bg-indigo-600 text-white shadow-xs'
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
-              <span>하이브리드형 (짝꿍 + 1인석)</span>
+              <span className="hidden sm:inline">하이브리드형</span>
+              <span className="sm:hidden">혼합형</span>
             </button>
 
             {/* Grid Edit Toggle */}
@@ -287,41 +292,42 @@ export const SeatingTab: React.FC<SeatingTabProps> = ({ students }) => {
               title="책상 유무를 직접 클릭해서 통로/빈자리 만들기"
             >
               <Sliders className="w-3.5 h-3.5" />
-              <span>{isEditGridMode ? '좌석 편집 완료' : '책상 켜기/끄기'}</span>
+              <span>{isEditGridMode ? '편집완료' : '좌석 켜기/끄기'}</span>
             </button>
           </div>
 
           {/* Right: Primary Action Buttons */}
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            {/* Shuffle & Reveal Button (Prominent CTA) */}
+            <button
+              id="btn-start-shuffle"
+              onClick={handleStartShuffle}
+              className="w-full sm:w-auto flex items-center justify-center space-x-1.5 px-4 py-2 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white rounded-xl text-xs sm:text-sm font-extrabold shadow-sm hover:shadow-md transition-all active:scale-95 order-first sm:order-none"
+            >
+              <Shuffle className="w-4 h-4" />
+              <span>자리 섞기 & 공개 시작!</span>
+            </button>
+
             {/* Teacher Secret Settings Button */}
             <button
               id="btn-teacher-secret-settings"
               onClick={() => setIsTeacherModalOpen(true)}
-              className="flex items-center space-x-1.5 px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-amber-300 rounded-xl text-xs font-bold border border-slate-700 shadow-xs transition-colors"
+              className="flex items-center space-x-1 sm:space-x-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-900 text-amber-300 rounded-xl text-xs font-bold border border-slate-700 shadow-xs transition-colors"
               title="교사만 볼 수 있는 특별 규칙 (꼭 떼어놔야 하는 둘, 지정석)"
             >
               <Lock className="w-3.5 h-3.5 text-amber-400" />
-              <span>교사 전용 비밀 설정</span>
+              <span className="hidden sm:inline">교사 전용 비밀 설정</span>
+              <span className="sm:hidden">교사 비밀</span>
               {(constraints.separationPairs.length > 0 ||
                 constraints.fixedAssignments.length > 0) && (
                 <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
               )}
             </button>
 
-            {/* Shuffle & Reveal Button */}
-            <button
-              id="btn-start-shuffle"
-              onClick={handleStartShuffle}
-              className="flex items-center space-x-1.5 px-4 py-2 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white rounded-xl text-xs font-extrabold shadow-sm hover:shadow-md transition-all active:scale-95"
-            >
-              <Shuffle className="w-4 h-4" />
-              <span>자리 섞기 & 공개 시작!</span>
-            </button>
-
             {/* Print Button */}
             <button
               onClick={triggerPrint}
-              className="flex items-center space-x-1 px-3 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold shadow-2xs transition-colors"
+              className="flex items-center space-x-1 px-2.5 sm:px-3 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold shadow-2xs transition-colors"
               title="A4 용지 인쇄"
             >
               <Printer className="w-3.5 h-3.5 text-slate-600" />
@@ -332,23 +338,23 @@ export const SeatingTab: React.FC<SeatingTabProps> = ({ students }) => {
             <button
               onClick={handleExportJpg}
               disabled={isExporting}
-              className="flex items-center space-x-1 px-3 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold shadow-2xs transition-colors disabled:opacity-50"
+              className="flex items-center space-x-1 px-2.5 sm:px-3 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold shadow-2xs transition-colors disabled:opacity-50"
               title="JPG 고화질 이미지 저장"
             >
               <Download className="w-3.5 h-3.5 text-indigo-600" />
-              <span>{isExporting ? '저장 중...' : 'JPG 다운로드'}</span>
+              <span>{isExporting ? '저장중' : 'JPG'}</span>
             </button>
 
             {/* Copy Clipboard */}
             <button
               onClick={handleCopyClipboard}
-              className="flex items-center space-x-1 px-2.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold shadow-2xs transition-colors"
+              className="flex items-center space-x-1 px-2 sm:px-2.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold shadow-2xs transition-colors"
               title="클립보드에 이미지 복사 (한글/문서에 바로 붙여넣기 가능)"
             >
               {copyFeedback ? (
                 <>
                   <Check className="w-3.5 h-3.5 text-emerald-600" />
-                  <span className="text-emerald-600">복사됨!</span>
+                  <span className="text-emerald-600 font-bold">복사됨!</span>
                 </>
               ) : (
                 <>
@@ -466,7 +472,7 @@ export const SeatingTab: React.FC<SeatingTabProps> = ({ students }) => {
       {/* Printable / Exportable Classroom Grid Area */}
       <div
         ref={printAreaRef}
-        className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm printable-area"
+        className="bg-white rounded-2xl p-3 sm:p-8 border border-slate-200 shadow-sm printable-area"
       >
         {/* Printable Title Bar (Printed on top of page / JPG export) */}
         <div className="mb-6 text-center border-b border-slate-200 pb-4">

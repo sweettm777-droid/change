@@ -164,22 +164,22 @@ export const TeacherSettingsModal: React.FC<TeacherSettingsModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-3 sm:p-4 overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-slate-200 flex flex-col max-h-[92dvh] animate-in fade-in zoom-in-95 duration-200">
         {/* Modal Header */}
-        <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
+        <div className="px-4 sm:px-6 py-3.5 sm:py-4 bg-slate-900 text-white flex items-center justify-between shrink-0">
           <div className="flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0">
               <Lock className="w-4 h-4" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <h3 className="font-bold text-base tracking-tight">교사 전용 비밀 설정</h3>
-                <span className="text-[11px] bg-rose-500/20 text-rose-300 border border-rose-500/40 px-2 py-0.5 rounded-full font-medium">
+                <h3 className="font-bold text-sm sm:text-base tracking-tight">교사 전용 비밀 설정</h3>
+                <span className="text-[10px] sm:text-[11px] bg-rose-500/20 text-rose-300 border border-rose-500/40 px-2 py-0.5 rounded-full font-medium">
                   비공개 보관
                 </span>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-[11px] sm:text-xs text-slate-400">
                 학생 화면에는 노출되지 않으며, 교사의 특별 배정 규칙을 비밀리에 처리합니다.
               </p>
             </div>
@@ -233,7 +233,7 @@ export const TeacherSettingsModal: React.FC<TeacherSettingsModalProps> = ({
           </div>
         ) : (
           /* Authenticated Settings Screen */
-          <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
+          <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 flex-1 overflow-y-auto">
             {/* Info notice */}
             <div className="flex items-start space-x-2.5 bg-amber-50 border border-amber-200/80 rounded-xl p-3 text-xs text-amber-900">
               <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
@@ -456,21 +456,21 @@ export const TeacherSettingsModal: React.FC<TeacherSettingsModalProps> = ({
         )}
 
         {/* Modal Footer */}
-        <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
-          <div className="text-xs text-slate-500">
+        <div className="px-4 sm:px-6 py-3 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2 shrink-0">
+          <div className="text-[11px] sm:text-xs text-slate-500">
             {isAuthenticated ? '설정이 저장되면 즉시 다음 자리배치에 반영됩니다.' : ''}
           </div>
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 ml-auto">
             <button
               onClick={onClose}
-              className="px-4 py-2 border border-slate-300 text-slate-700 rounded-xl text-sm font-medium hover:bg-slate-100"
+              className="px-3.5 sm:px-4 py-2 border border-slate-300 text-slate-700 rounded-xl text-xs sm:text-sm font-medium hover:bg-slate-100"
             >
               닫기
             </button>
             {isAuthenticated && (
               <button
                 onClick={handleSaveAndClose}
-                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold shadow-xs flex items-center space-x-1.5"
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs sm:text-sm font-semibold shadow-xs flex items-center space-x-1.5"
               >
                 <Check className="w-4 h-4" />
                 <span>비밀 조건 저장</span>

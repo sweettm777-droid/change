@@ -7,6 +7,9 @@ export async function exportAsJpg(element: HTMLElement, fileName: string = 'í•™ê
       useCORS: true,
       backgroundColor: '#ffffff',
       logging: false,
+      windowWidth: 1200, // Ensure desktop resolution layout during mobile export
+      scrollX: 0,
+      scrollY: 0,
     });
 
     const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
@@ -29,6 +32,9 @@ export async function copyImageToClipboard(element: HTMLElement): Promise<boolea
       useCORS: true,
       backgroundColor: '#ffffff',
       logging: false,
+      windowWidth: 1200,
+      scrollX: 0,
+      scrollY: 0,
     });
 
     return new Promise((resolve) => {
